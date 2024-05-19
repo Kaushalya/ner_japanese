@@ -1,0 +1,13 @@
+torch
+torchvision
+transformers
+datasets
+tqdm
+tensorboard
+accelerate
+seqeval
+evaluate
+fugashi
+unidic_lite
+sentencepiece
+streamlit
