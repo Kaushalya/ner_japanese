@@ -73,10 +73,17 @@ label_colors = [
     "#800080",
 ]
 color_map = {
-    label: color for label, color in zip(label_list_en, label_colors[: len(label_list)])
+    label: color
+    for label, color in zip(label_list_en, label_colors[: len(label_list_en)])
 }
 
 model = load_model()
+
+# Display model information
+st.write("### Model Information")
+st.write(f"Model Name: {model_name}")
+st.write(f"Number of labels: {len(label_list_en)}")
+st.write(f"Labels: {', '.join(label_list_en)}")
 
 
 # Function to get NER tags
@@ -117,41 +124,47 @@ def get_ner_tags(text):
             word = ""
     return pred_entities
 
+def reset_state():
+    st.session_state["input_area"] = ""
+    st.rerun()
 
 # Streamlit UI
 st.title("Japanese Named Entity Recognition (NER)")
-# Initialize session state for the text area
-if "input_area" not in st.session_state:
-    st.session_state["input_area"] = ""
+output_text = ""
 
-sentence = st.text_area(
-    "Enter a Japanese sentence:", st.session_state["input_area"]
-)
+# Create two columns
+col1, col2 = st.columns([1, 1])
 
-if st.button("Submit"):
-    if sentence:
-        ner_tags = get_ner_tags(sentence)
-        st.write(ner_tags)
-
-        # Display results
-        st.write("### Output")
-        output_text = " ".join(
-            [
-                f"<span style='color:{color_map.get(tag['type'], 'black')}'>{tag['word']}[{tag['type']}]</span>"
-                if tag["type"] != "O"
-                else tag["word"]
-                for tag in ner_tags
-            ]
-        )
-        st.write(
-            output_text,
-            unsafe_allow_html=True,
-        )
-        # Update session state
-        # st.session_state['text_area'] = sentence
-    else:
-        st.write("Please enter a sentence.")
-if st.button("Clear"):
-    st.write("Cleared the input.")
-    st.session_state["input_area"] = ""
-    st.rerun()
+with col1:
+    if "input_area" not in st.session_state:
+        st.session_state["input_area"] = ""
+    print("input area", st.session_state["input_area"])
+    sentence = st.text_area(
+        "Enter a Japanese sentence:", st.session_state["input_area"]
+    )
+    left_column, right_column = st.columns(2)
+    if left_column.button("Submit"):
+        if sentence:
+            ner_tags = get_ner_tags(sentence)
+            st.write(ner_tags)
+            output_text = " ".join(
+                [
+                    f"<span style='color:{color_map.get(tag['type'], 'black')}'>{tag['word']}[{tag['type']}]</span>"
+                    if tag["type"] != "O"
+                    else tag["word"]
+                    for tag in ner_tags
+                ]
+            )
+            # Update session state
+            # st.session_state['text_area'] = sentence
+        else:
+            st.write("Please enter a sentence.")
+    if right_column.button("Clear"):
+        st.write("Cleared the input.")
+        reset_state()
+with col2:
+    st.write("### Output")
+    st.write(
+        output_text,
+        unsafe_allow_html=True,
+    )
