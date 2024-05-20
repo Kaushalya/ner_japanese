@@ -11,3 +11,4 @@ fugashi
 unidic_lite
 sentencepiece
 streamlit
+gradio

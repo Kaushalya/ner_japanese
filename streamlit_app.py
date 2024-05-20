@@ -1,8 +1,7 @@
 from pyexpat import model
 import streamlit as st
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
-import torch
-import numpy as np
+
 
 # Load the fine-tuned model and tokenizer
 model_name = "./models/xlm-roberta-base/checkpoint-3400"  # Adjust to the path where your model is saved
@@ -124,9 +123,11 @@ def get_ner_tags(text):
             word = ""
     return pred_entities
 
+
 def reset_state():
     st.session_state["input_area"] = ""
     st.rerun()
+
 
 # Streamlit UI
 st.title("Japanese Named Entity Recognition (NER)")
@@ -149,7 +150,7 @@ with col1:
             st.write(ner_tags)
             output_text = " ".join(
                 [
-                    f"<span style='color:{color_map.get(tag['type'], 'black')}'>{tag['word']}[{tag['type']}]</span>"
+                    f"<span style='background-color:{color_map.get(tag['type'], 'black')}'>{tag['word']}[{tag['type']}]</span>"
                     if tag["type"] != "O"
                     else tag["word"]
                     for tag in ner_tags
