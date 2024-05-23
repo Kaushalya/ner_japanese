@@ -1,0 +1,4 @@
+dataset_name: "stockmark/ner-wikipedia-dataset"
+dataset_path: "./data/ner-wikipedia-dataset"
+train_size: 0.8
+seed: 1233
