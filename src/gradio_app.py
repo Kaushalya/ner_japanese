@@ -1,7 +1,8 @@
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 import gradio as gr
+import argparse
 
-model_name = "./models/xlm-roberta-base/checkpoint-3400"
+# model_name = "../models/xlm-roberta-base/checkpoint-3400"
 
 label2id = {
     "O": 0,
@@ -24,6 +25,11 @@ label2id = {
 }
 id2label = {v: k for k, v in label2id.items()}
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--model_path", type=str, required=True)
+args = parser.parse_args()
+model_name = args.model_path
+
 
 def load_model():
     model = AutoModelForTokenClassification.from_pretrained(model_name)
@@ -37,8 +43,10 @@ def load_model():
     )
     return ner_model
 
+
 if gr.NO_RELOAD:
     ner_model = load_model()
+
 
 # Function to get NER tags
 def get_ner_tags(text):
@@ -93,4 +101,4 @@ interface = gr.Interface(
 )
 
 # Launch the Gradio interface
-interface.launch(share=True)
+interface.launch(share=False)

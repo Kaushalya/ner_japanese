@@ -7,8 +7,5 @@ tensorboard
 accelerate
 seqeval
 evaluate
-fugashi
-unidic_lite
 sentencepiece
-streamlit
 gradio

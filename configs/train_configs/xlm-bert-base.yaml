@@ -1,0 +1,8 @@
+dataset_path: "./data/ner-wikipedia-dataset"
+model_name: "xlm-roberta-base"
+save_strategy: "epoch"
+learning_rate: 0.00002
+epochs: 100
+train_batch_size: 64
+eval_batch_size: 64
+seed: 123

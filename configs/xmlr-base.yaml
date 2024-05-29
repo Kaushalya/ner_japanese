@@ -1,0 +1,4 @@
+base_model: "xlm-roberta-base"
+dataset_path: "stockmark/ner-wikipedia-dataset"
+batch_size: 8
+max_seq_length: 128
